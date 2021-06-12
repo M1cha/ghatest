@@ -11,8 +11,8 @@ jobs:
             github.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head_sha: context.sha,
-              name: 'my check',
+              head_sha: 'a8f4f079e788da4188b90446f3581b2bb3984204',
+              name: 'my check2',
               status: 'completed',
               conclusion: 'success',
               output: {
@@ -21,3 +21,9 @@ jobs:
                 text: 'my text',
               }
             })
+
+      - run: |
+         curl -v \
+          -H 'Accept: application/vnd.github.v3+json' \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          'https://api.github.com/repos/${{github.repository}}/pulls?state=open&base=main&head=${{github.repository}}:refs/heads/yo'
