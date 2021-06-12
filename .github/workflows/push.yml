@@ -1,0 +1,23 @@
+on: push
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v4
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head_sha: context.sha,
+              name: 'my check',
+              status: 'completed',
+              conclusion: 'success',
+              output: {
+                title: 'my title',
+                summary: 'my summary',
+                text: 'my text',
+              }
+            })
